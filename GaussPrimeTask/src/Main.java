@@ -9,10 +9,17 @@ public class Main {
 	private static int[][] gaussCache = null; //0 is not set, 1 is false, 2 is true
 	
 	public static void main(String[] args){
-		int lowestX = 4000; //TODO Input these via args
+		int lowestX = 4000;
 		int lowestY = 4000;
 		int highestX = 6000;
 		int highestY = 6000;
+		
+		if(args.length > 0){
+			lowestX = Integer.parseInt(args[0]);
+			highestX = Integer.parseInt(args[1]);
+			lowestY = Integer.parseInt(args[2]);
+			highestY = Integer.parseInt(args[3]);
+		}
 		
 		GRID_SIYE_X = highestX - lowestX;
 		GRID_SIYE_Y = highestY - lowestY;
@@ -51,7 +58,8 @@ public class Main {
 		}
 		
 		long dur = System.currentTimeMillis() - startTime;
-		System.out.println("Duration: "+dur+"MS Min X: "+mx+" Min Y: "+my+" Max X: "+(mx+dia)+" Max Y: "+(my+dia)+" FINAL OUTPUT: "+(mx+my));
+		/*System.out.println("Duration: "+dur+"MS Min X: "+mx+" Min Y: "+my+" Max X: "+(mx+dia)+" Max Y: "+(my+dia)+" FINAL OUTPUT: "+(mx+my));*/
+		System.out.println((mx+my));
 	}
 	
 	public static int getLargestBoxDiameterPossibleGivenGaussPrime(int minX, int minY){
