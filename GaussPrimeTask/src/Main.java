@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class Main {
 	private static int GRID_SIYE_X = 6000;
@@ -9,17 +10,22 @@ public class Main {
 	private static int[][] gaussCache = null; //0 is not set, 1 is false, 2 is true
 	
 	public static void main(String[] args){
-		int lowestX = 4000;
-		int lowestY = 4000;
-		int highestX = 6000;
-		int highestY = 6000;
+		int lowestX = 0;
+		int lowestY = 0;
+		int highestX = 3000;
+		int highestY = 3000;
 		
-		if(args.length > 0){
-			lowestX = Integer.parseInt(args[0]);
-			highestX = Integer.parseInt(args[1]);
-			lowestY = Integer.parseInt(args[2]);
-			highestY = Integer.parseInt(args[3]);
+		Scanner scanner = new Scanner(System.in);
+        String string = scanner.nextLine();
+        String[] str = string.split(" ");
+		
+		if(str.length > 0){
+			lowestX = Integer.parseInt(str[0]);
+			highestX = Integer.parseInt(str[1]);
+			lowestY = Integer.parseInt(str[2]);
+			highestY = Integer.parseInt(str[3]);
 		}
+		scanner.close();
 		
 		GRID_SIYE_X = highestX - lowestX;
 		GRID_SIYE_Y = highestY - lowestY;
@@ -58,8 +64,8 @@ public class Main {
 		}
 		
 		long dur = System.currentTimeMillis() - startTime;
-		/*System.out.println("Duration: "+dur+"MS Min X: "+mx+" Min Y: "+my+" Max X: "+(mx+dia)+" Max Y: "+(my+dia)+" FINAL OUTPUT: "+(mx+my));*/
 		System.out.println((mx+my));
+		System.out.println("Duration: "+dur+"MS Box: MinX: "+mx+" MinY: "+my+" MaxX: "+(mx+dia)+" MaxY: "+(my+dia));
 	}
 	
 	public static int getLargestBoxDiameterPossibleGivenGaussPrime(int minX, int minY){
