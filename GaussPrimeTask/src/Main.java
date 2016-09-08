@@ -24,7 +24,7 @@ public class Main {
 		double distanceToCenterSq = Integer.MAX_VALUE;
 		int dia = 0;
 		
-		gaussCache = new int[GRID_SIZE_X+1+X_OFFSET][GRID_SIZE_Y+1+Z_OFFSET];
+		gaussCache = new int[GRID_SIZE_X+1][GRID_SIZE_Y+1];
 		
 		long startTime = System.currentTimeMillis();
 		for(int minX = 0;minX<=GRID_SIZE_X;minX++){
@@ -95,14 +95,14 @@ public class Main {
 			b = c;
 		}
 		
-		int cached = gaussCache[a][b];
+		int cached = gaussCache[a-X_OFFSET][b-Z_OFFSET];
 		if(cached != 0){
 			return cached == 2;
 		}
 		
 		if(a != 0 && b != 0){
 			boolean bool = isPrime(a*a+b*b);
-			gaussCache[a][b] = bool ? 2:1;
+			gaussCache[a-X_OFFSET][b-Z_OFFSET] = bool ? 2:1;
 			return bool;
 		}
 		
@@ -115,7 +115,7 @@ public class Main {
 		}
 		
 		boolean bool = isPrime(abs) && abs % 4==3;
-		gaussCache[a][b] = bool ? 2:1;
+		gaussCache[a-X_OFFSET][b-Z_OFFSET] = bool ? 2:1;
 		return bool;
 	}
 	
