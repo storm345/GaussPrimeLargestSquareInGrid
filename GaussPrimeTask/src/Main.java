@@ -49,7 +49,7 @@ public class Main {
 				}
 			}
 		};
-		t.start();
+		t.start(); //Figures out if numbers are gauss primes in the background, starting with the larger (slower to compute) numbers
 		
 		long startTime = System.currentTimeMillis();
 		for(int minX = 0;minX<=GRID_SIYE_X;minX++){
