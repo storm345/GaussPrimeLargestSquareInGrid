@@ -48,7 +48,6 @@ public class Main {
 					}
 				}
 			}
-			
 		};
 		t.start();
 		
@@ -74,6 +73,12 @@ public class Main {
 					}
 				}
 			}
+		}
+		
+		if(mx == -1){
+			System.out.println("None found");
+			t.stop();
+			return;
 		}
 		
 		long dur = System.currentTimeMillis() - startTime;
@@ -117,33 +122,34 @@ public class Main {
 	}
 	
 	public static boolean isGaussPrime(int a, int b){
+		int x = a;
+		int y = b;
 		if(a>b){ //Since order doesn't matter, we can use this to halve the number of gauss prime calculations
-			int c = a;
-			a = b;
-			b = c;
+			x = b;
+			y = a;
 		}
 		
-		int cached = gaussCache[a-X_OFFSET][b-Y_OFFSET];
+		int cached = gaussCache[x-X_OFFSET][y-Y_OFFSET];
 		if(cached != 0){
 			return cached == 2;
 		}
 		
 		if(a != 0 && b != 0){
-			boolean bool = isPrime(a*a+b*b);
-			gaussCache[a-X_OFFSET][b-Y_OFFSET] = bool ? 2:1;
+			boolean bool = isPrime(x*x+y*y);
+			gaussCache[x-X_OFFSET][y-Y_OFFSET] = bool ? 2:1;
 			return bool;
 		}
 		
 		int abs;
-		if(a == 0){
-			abs = Math.abs(b);
+		if(x == 0){
+			abs = Math.abs(y);
 		}
 		else {
-			abs = Math.abs(a);
+			abs = Math.abs(x);
 		}
 		
 		boolean bool = isPrime(abs) && abs % 4==3;
-		gaussCache[a-X_OFFSET][b-Y_OFFSET] = bool ? 2:1;
+		gaussCache[x-X_OFFSET][y-Y_OFFSET] = bool ? 2:1;
 		return bool;
 	}
 	
