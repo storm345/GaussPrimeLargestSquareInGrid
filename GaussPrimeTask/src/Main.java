@@ -39,6 +39,19 @@ public class Main {
 		
 		gaussCache = new int[GRID_SIYE_X+1][GRID_SIYE_Y+1];
 		
+		Thread t = new Thread(){
+			@Override
+			public void run(){
+				for(int minX = GRID_SIYE_X;minX>=0;minX--){
+					for(int minY = GRID_SIYE_Y;minY>=0;minY--){
+						isGaussPrime(minX+X_OFFSET, minY+Y_OFFSET);
+					}
+				}
+			}
+			
+		};
+		t.start();
+		
 		long startTime = System.currentTimeMillis();
 		for(int minX = 0;minX<=GRID_SIYE_X;minX++){
 			for(int minY = 0;minY<=GRID_SIYE_Y;minY++){
@@ -65,6 +78,7 @@ public class Main {
 		
 		long dur = System.currentTimeMillis() - startTime;
 		System.out.println((mx+my));
+		t.stop();
 		System.out.println("Duration: "+dur+"MS Box: MinX: "+mx+" MinY: "+my+" MaxX: "+(mx+dia)+" MaxY: "+(my+dia));
 	}
 	
