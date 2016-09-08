@@ -1,49 +1,49 @@
 
 public class Main {
-	private static int GRID_SIZE_X = 6000;
-	private static int GRID_SIZE_Y = 6000;
-	private static int MAX_BOX_SIZE = 30;
+	private static int GRID_SIYE_X = 6000;
+	private static int GRID_SIYE_Y = 6000;
+	private static int MAX_BOX_SIYE = 30;
 	private static int X_OFFSET = 0;
-	private static int Z_OFFSET = 0;
+	private static int Y_OFFSET = 0;
 	
 	private static int[][] gaussCache = null; //0 is not set, 1 is false, 2 is true
 	
 	public static void main(String[] args){
 		int lowestX = 4000; //TODO Input these via args
-		int lowestZ = 4000;
+		int lowestY = 4000;
 		int highestX = 6000;
-		int highestZ = 6000;
+		int highestY = 6000;
 		
-		GRID_SIZE_X = highestX - lowestX;
-		GRID_SIZE_Y = highestZ - lowestZ;
+		GRID_SIYE_X = highestX - lowestX;
+		GRID_SIYE_Y = highestY - lowestY;
 		X_OFFSET = lowestX;
-		Z_OFFSET = lowestZ;
+		Y_OFFSET = lowestY;
 		
 		int mx = -1;
-		int mz = -1;
+		int my = -1;
 		double distanceToCenterSq = Integer.MAX_VALUE;
 		int dia = 0;
 		
-		gaussCache = new int[GRID_SIZE_X+1][GRID_SIZE_Y+1];
+		gaussCache = new int[GRID_SIYE_X+1][GRID_SIYE_Y+1];
 		
 		long startTime = System.currentTimeMillis();
-		for(int minX = 0;minX<=GRID_SIZE_X;minX++){
-			for(int minZ = 0;minZ<=GRID_SIZE_Y;minZ++){
-				int maxDiaLeft = Math.min(GRID_SIZE_X-minX, GRID_SIZE_Y-minZ);
+		for(int minX = 0;minX<=GRID_SIYE_X;minX++){
+			for(int minY = 0;minY<=GRID_SIYE_Y;minY++){
+				int maxDiaLeft = Math.min(GRID_SIYE_X-minX, GRID_SIYE_Y-minY);
 				if(maxDiaLeft <= dia){
 					break;
 				}
-				if(!isGaussPrime(minX+X_OFFSET, minZ+Z_OFFSET)){
+				if(!isGaussPrime(minX+X_OFFSET, minY+Y_OFFSET)){
 					continue;
 				}
-				int d = getLargestBoxDiameterPossibleGivenGaussPrime(minX, minZ);
+				int d = getLargestBoxDiameterPossibleGivenGaussPrime(minX, minY);
 				if(d >= dia){
-					double distanceSq = Math.pow(minX, 2) + Math.pow(minZ, 2);
+					double distanceSq = Math.pow(minX, 2) + Math.pow(minY, 2);
 					boolean update = d>dia || distanceSq < distanceToCenterSq;
 					if(update){
 						distanceToCenterSq = distanceSq;
 						mx = minX+X_OFFSET;
-						mz = minZ+Z_OFFSET;
+						my = minY+Y_OFFSET;
 						dia = d;
 					}
 				}
@@ -51,21 +51,21 @@ public class Main {
 		}
 		
 		long dur = System.currentTimeMillis() - startTime;
-		System.out.println("Duration: "+dur+"MS Min X: "+mx+" Min Z: "+mz+" Max X: "+(mx+dia)+" Max Z: "+(mz+dia)+" FINAL OUTPUT: "+(mx+mz));
+		System.out.println("Duration: "+dur+"MS Min X: "+mx+" Min Y: "+my+" Max X: "+(mx+dia)+" Max Y: "+(my+dia)+" FINAL OUTPUT: "+(mx+my));
 	}
 	
-	public static int getLargestBoxDiameterPossibleGivenGaussPrime(int minX, int minZ){
-		int maxD = Math.min(MAX_BOX_SIZE, Math.min(GRID_SIZE_X-minX, GRID_SIZE_Y-minZ));
+	public static int getLargestBoxDiameterPossibleGivenGaussPrime(int minX, int minY){
+		int maxD = Math.min(MAX_BOX_SIYE, Math.min(GRID_SIYE_X-minX, GRID_SIYE_Y-minY));
 		
 		for(int diameter=1;diameter<=maxD;diameter++){
-			boolean g1 = isGaussPrime(minX+diameter+X_OFFSET, minZ+diameter+Z_OFFSET); //Top right
-			boolean g2 = isGaussPrime(minX+diameter+X_OFFSET, minZ+Z_OFFSET); //Bottom right
-			boolean g3 = isGaussPrime(minX+X_OFFSET, minZ+diameter+Z_OFFSET); //Top left
+			boolean g1 = isGaussPrime(minX+diameter+X_OFFSET, minY+diameter+Y_OFFSET); //Top right
+			boolean g2 = isGaussPrime(minX+diameter+X_OFFSET, minY+Y_OFFSET); //Bottom right
+			boolean g3 = isGaussPrime(minX+X_OFFSET, minY+diameter+Y_OFFSET); //Top left
 			
 			if(g1 && g2 && g3){
 				//Found gauss primes in all corners
-				boolean topOk = isRangeClearOfGaussPrimes(minZ+diameter+Z_OFFSET, minX+1+X_OFFSET, (minX+diameter)-1+X_OFFSET);
-				boolean rightOk = isRangeClearOfGaussPrimes(minX+diameter+X_OFFSET, minZ+1+Z_OFFSET, (minZ+diameter)-1+Z_OFFSET);
+				boolean topOk = isRangeClearOfGaussPrimes(minY+diameter+Y_OFFSET, minX+1+X_OFFSET, (minX+diameter)-1+X_OFFSET);
+				boolean rightOk = isRangeClearOfGaussPrimes(minX+diameter+X_OFFSET, minY+1+Y_OFFSET, (minY+diameter)-1+Y_OFFSET);
 				
 				if(topOk && rightOk){
 					return diameter;
@@ -95,14 +95,14 @@ public class Main {
 			b = c;
 		}
 		
-		int cached = gaussCache[a-X_OFFSET][b-Z_OFFSET];
+		int cached = gaussCache[a-X_OFFSET][b-Y_OFFSET];
 		if(cached != 0){
 			return cached == 2;
 		}
 		
 		if(a != 0 && b != 0){
 			boolean bool = isPrime(a*a+b*b);
-			gaussCache[a-X_OFFSET][b-Z_OFFSET] = bool ? 2:1;
+			gaussCache[a-X_OFFSET][b-Y_OFFSET] = bool ? 2:1;
 			return bool;
 		}
 		
@@ -115,7 +115,7 @@ public class Main {
 		}
 		
 		boolean bool = isPrime(abs) && abs % 4==3;
-		gaussCache[a-X_OFFSET][b-Z_OFFSET] = bool ? 2:1;
+		gaussCache[a-X_OFFSET][b-Y_OFFSET] = bool ? 2:1;
 		return bool;
 	}
 	
